@@ -55,7 +55,7 @@ pose_theta = 0
 
 vL = 0
 vR = 0
-#(0.65, -2.82), (0.6, -3.08)   (0.65, -2.815555555)  0.61, 0.62 < x< 0.62, 65,66
+
 waypoints = [(1.9, -2.5), (0.65, -2.81), (0.649, -3.1), (0.45, -3.5), (0.2, -3.8)]#[(1.9, -2.5), (0.65, -2.815555555), (0.655, -3.1)]
 current_waypoint = (2.0, 0.0)
 
@@ -80,7 +80,7 @@ while robot.step(timestep) != -1:
 
     #STEP 2: Controller (with gains)
 
-    x_gain = 1.5#1.5
+    x_gain = 1.5
     theta_gain = 3.1
     x_prime = dist_err * x_gain
     theta_prime = (theta_gain * bearing_err)
@@ -89,8 +89,8 @@ while robot.step(timestep) != -1:
         current_waypoint = waypoints.pop(0)
 
 
-    print("Distance Error: %f, Bearing Error: %f x prime: %f" % (dist_err, bearing_err, x_prime))
-    print("Target x: %f Target y: %f" % (current_waypoint[0], current_waypoint[1]))
+    #print("Distance Error: %f, Bearing Error: %f x prime: %f" % (dist_err, bearing_err, x_prime))
+    #print("Target x: %f Target y: %f" % (current_waypoint[0], current_waypoint[1]))
 
     #STEP 3: Compute wheelspeeds
 
