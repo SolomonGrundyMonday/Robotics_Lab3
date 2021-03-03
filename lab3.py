@@ -55,8 +55,8 @@ pose_theta = 0
 
 vL = 0
 vR = 0
-
-waypoints = [(1.9, -2.5), (1.37, -2.43), (1.44, -3.0)]
+#(0.65, -2.82), (0.6, -3.08)   (0.65, -2.815555555)  0.61, 0.62 < x< 0.62, 65,66
+waypoints = [(1.9, -2.5), (0.65, -2.81), (0.649, -3.1), (0.45, -3.5), (0.3, -3.6)]#[(1.9, -2.5), (0.65, -2.815555555), (0.655, -3.1)]
 current_waypoint = (2.0, 0.0)
 
 while robot.step(timestep) != -1:
@@ -80,32 +80,35 @@ while robot.step(timestep) != -1:
 
     #STEP 2: Controller (with gains)
 
-    x_gain = 1.5
-    theta_gain = 3.1 
+    x_gain = 1.5#1.5
+    theta_gain = 3.1
     x_prime = dist_err * x_gain
     theta_prime = (theta_gain * bearing_err)
-    
+
     if(len(waypoints) != 0 and dist_err < 0.1):
         current_waypoint = waypoints.pop(0)
+
 
     print("Distance Error: %f, Bearing Error: %f x prime: %f" % (dist_err, bearing_err, x_prime))
     print("Target x: %f Target y: %f" % (current_waypoint[0], current_waypoint[1]))
 
     #STEP 3: Compute wheelspeeds
 
-    
+
     if(bearing_err > 0.01):
         vR = theta_prime + theta_gain
         vL = -theta_prime - theta_gain
     elif(bearing_err < -0.01):
         vR = -theta_prime - theta_gain
         vL = theta_prime + theta_gain
-    else: 
+    elif (not waypoints and dist_err < 0.1):
+        vL = vR = 0
+    else:
         vR = x_prime + x_gain
         vL = x_prime + x_gain
 
     #STEP 4: Normalize wheelspeed
-    
+
     if (vR > MAX_SPEED):
         vR = MAX_SPEED
     elif(vR < -MAX_SPEED):
@@ -114,7 +117,7 @@ while robot.step(timestep) != -1:
         VL = MAX_SPEED
     elif(vL < -MAX_SPEED):
         vL = -MAX_SPEED
-        
+
     #print("Left Velocity: %f, Right Velocity: %f", (vL, vR))
 
     ################# Do not modify this block of the code ########################
@@ -128,5 +131,3 @@ while robot.step(timestep) != -1:
     # Enter here functions to send actuator commands
     robot_parts[MOTOR_LEFT].setVelocity(vL)
     robot_parts[MOTOR_RIGHT].setVelocity(vR)
-   
-    
